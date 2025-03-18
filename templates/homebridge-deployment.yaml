@@ -18,11 +18,8 @@ spec:
     metadata:
       annotations:
         # invokes a redeployment if configuration changes
-        {{- $configFile := printf .Values.config.configFile.path }}
-        {{- $packageFile := printf .Values.config.packageFile.path }}
-        config-sha: {{ sha256sum (.Files.Get $configFile) }}
-        package-sha: {{ sha256sum (.Files.Get $packageFile) }}
-
+        config-sha: {{ sha256sum (.Values.config.config | toYaml) }}
+        package-sha: {{ sha256sum (.Values.config.package | toYaml) }}
       labels:
         app: {{ .Chart.Name }}
         app.kubernetes.io/instance: {{ .Release.Name }}
@@ -37,7 +34,7 @@ spec:
 
         - name: homebridge-persist
           persistentVolumeClaim:
-            claimName: {{ .Chart.Name }}-pvclaim
+            claimName: {{ .Chart.Name }}-persist
 
         - name: homebridge-accessories
           persistentVolumeClaim:
@@ -55,11 +52,9 @@ spec:
             - name: homebridge-accessories
               mountPath: /homebridge/accessories
 
-            {{- if .Values.config.configFile.enabled }}
             - name: config
               mountPath: /homebridge/config.json
               subPath: config.json
-            {{- end }}
 
             - name: config
               mountPath: /homebridge/package.json
@@ -90,8 +85,6 @@ spec:
             - name: {{ .Values.ports.service.name }}
               containerPort: {{ .Values.ports.service.number }}
               protocol: {{ .Values.ports.service.protocol }}
-
-      hostNetwork: true
 
       {{- if .Values.affinity.value }}
       affinity:

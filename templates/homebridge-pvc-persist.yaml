@@ -1,11 +1,14 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ .Chart.Name }}-pvclaim
+  name: {{ .Chart.Name }}-persist
 spec:
   accessModes:
     - ReadWriteOnce
   volumeMode: Filesystem
+  {{ if .Values.persist.persist.storageClassName -}}
+  storageClassName: {{ .Values.persist.persist.storageClassName }}
+  {{- end }}
   resources:
     requests:
-      storage: 10Mi
+      storage: 300Mi

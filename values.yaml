@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image: 
-  digest: oznu/homebridge@sha256:ecf944ab0edc9fced9495ab9f9c52aff5bd86ab02c74dab883dc9a82d79a3eb9
+  digest: homebridge/homebridge:latest
   pullPolicy: IfNotPresent
 
 environment:
@@ -13,8 +13,13 @@ environment:
   timezone: America/Los_Angeles
   packages: ffmpeg
 
-ports:
+persist:
+  accessories:
+    storageClassName: null
+  persist:
+    storageClassName: null
 
+ports:
   ui:
     name: ui-http
     number: 80
@@ -27,6 +32,7 @@ ports:
 
 service:
   ip:
+  annotations: {}
 
 affinity:
   weight: 100
@@ -34,8 +40,5 @@ affinity:
   value:
 
 config:
-  configFile:
-    enabled: true
-    path: config/config.json
-  packageFile:
-    path: config/package.json
+  config: {}
+  package: {}

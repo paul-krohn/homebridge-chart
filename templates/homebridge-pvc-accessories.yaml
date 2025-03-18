@@ -6,6 +6,9 @@ spec:
   accessModes:
     - ReadWriteOnce
   volumeMode: Filesystem
+  {{ if .Values.persist.accessories.storageClassName -}}
+  storageClassName: {{ .Values.persist.accessories.storageClassName }}
+  {{- end }}
   resources:
     requests:
-      storage: 10Mi
+      storage: 300Mi
