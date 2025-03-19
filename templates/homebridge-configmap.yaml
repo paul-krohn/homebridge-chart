@@ -3,8 +3,11 @@ kind: ConfigMap
 metadata:
   name: homebridge-config
 data:
-  config.json: |-
+  config.json: |
     {{ .Values.config.config | toJson | nindent 4 }}
 
-  package.json: |-
+  package.json: |
     {{ .Values.config.package | toJson | nindent 4 }}
+
+  auth.json: |
+    {{ .Values.config.auth | toJson | nindent 4 }}

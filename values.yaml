@@ -42,3 +42,4 @@ affinity:
 config:
   config: {}
   package: {}
+  auth: []

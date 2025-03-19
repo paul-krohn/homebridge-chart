@@ -60,6 +60,12 @@ spec:
               mountPath: /homebridge/package.json
               subPath: package.json
 
+            {{ if .Values.config.auth | len }}
+            - name: config
+              mountPath: /homebridge/auth.json
+              subPath: auth.json
+            {{ end }}
+
           securityContext:
             privileged: true
 
