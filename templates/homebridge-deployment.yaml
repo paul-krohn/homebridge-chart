@@ -6,7 +6,10 @@ metadata:
     app: {{ .Chart.Name }}
 
 spec:
-  
+
+  strategy:
+    type: Recreate
+
   replicas: {{ .Values.replicaCount }}
   
   selector:
@@ -20,6 +23,7 @@ spec:
         # invokes a redeployment if configuration changes
         config-sha: {{ sha256sum (.Values.config.config | toYaml) }}
         package-sha: {{ sha256sum (.Values.config.package | toYaml) }}
+        scripts-sha: {{ .Values.scriptsSha | default "" | quote }}
       labels:
         app: {{ .Chart.Name }}
         app.kubernetes.io/instance: {{ .Release.Name }}
@@ -39,6 +43,10 @@ spec:
         - name: homebridge-accessories
           persistentVolumeClaim:
             claimName: {{ .Chart.Name }}-accessories
+
+        {{ if .Values.extraVolumes | len }}
+        {{ .Values.extraVolumes | toYaml | nindent 8 }}
+        {{ end }}
 
       containers:
         - name: {{ .Chart.Name }}-deployment
@@ -66,6 +74,9 @@ spec:
               subPath: auth.json
             {{ end }}
 
+            {{ if .Values.extraVolumeMounts | len }}
+            {{ .Values.extraVolumeMounts | toYaml | nindent 12 }}
+            {{ end }}
           securityContext:
             privileged: true
 
@@ -92,6 +103,7 @@ spec:
               containerPort: {{ .Values.ports.service.number }}
               protocol: {{ .Values.ports.service.protocol }}
 
+      hostNetwork: true
       {{- if .Values.affinity.value }}
       affinity:
         nodeAffinity:

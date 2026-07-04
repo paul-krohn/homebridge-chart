@@ -9,9 +9,15 @@ environment:
   puid: 0
   ui:
     enabled: 1
-    port: 80
   timezone: America/Los_Angeles
   packages: ffmpeg
+
+ingress:
+  enabled: false
+  host: "homebridge"
+  tls:
+    - hosts: ["homebridge"]
+      secretName: homebridge-tls
 
 persist:
   accessories:
@@ -43,3 +49,5 @@ config:
   config: {}
   package: {}
   auth: []
+
+

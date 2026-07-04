@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Chart.Name }}-service
+  name: {{ .Chart.Name }}-homekit
   {{- with .Values.service.annotations }}
   annotations:
     {{ toYaml . | nindent 4 }}
@@ -14,13 +14,10 @@ spec:
     app: {{ .Chart.Name }}
   externalTrafficPolicy: Local
   sessionAffinity: None
-  type: ClusterIP
+  type: LoadBalancer
+  loadBalancerIP: {{ .Values.service.ip }}
 
   ports:
-  - name: {{ .Values.ports.ui.name }}
-    port: {{ .Values.ports.ui.number }}
-    protocol: {{ .Values.ports.ui.protocol }}
-    targetPort: {{ .Values.ports.ui.name }}
   - name: {{ .Values.ports.service.name }}
     port: {{ .Values.ports.service.number }}
     protocol: {{ .Values.ports.service.protocol }}

@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Chart.Name }}-ui
+  {{- with .Values.service.annotations }}
+  annotations:
+    {{ toYaml . | nindent 4 }}
+  {{- end }}
+  labels:
+    app: {{ .Chart.Name }}
+
+spec:
+  selector:
+    app: {{ .Chart.Name }}
+  sessionAffinity: None
+  type: ClusterIP
+
+  ports:
+  - name: {{ .Values.ports.ui.name }}
+    # port: {{ .Values.ports.ui.number }}
+    port: 8585
+    protocol: {{ .Values.ports.ui.protocol }}
+    targetPort: {{ .Values.ports.ui.name }}
