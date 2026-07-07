@@ -7,10 +7,11 @@ image:
 environment:
   pgid: 0
   puid: 0
+  timezone: UTC
   ui:
     enabled: 1
-  timezone: America/Los_Angeles
   packages: ffmpeg
+  vars: []
 
 ingress:
   enabled: false

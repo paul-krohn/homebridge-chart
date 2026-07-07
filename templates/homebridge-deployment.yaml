@@ -93,6 +93,9 @@ spec:
               value: "{{ .Values.environment.timezone }}"
             - name: PACKAGES
               value: "{{ .Values.environment.packages }}"
+            {{- if .Values.environment.vars | len }}
+            {{ .Values.environment.vars | toYaml | nindent 12 }}
+            {{- end }}
 
           ports:
             - name: {{ .Values.ports.ui.name }}
